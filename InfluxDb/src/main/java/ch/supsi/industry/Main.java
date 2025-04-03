@@ -54,5 +54,21 @@ public class Main {
 *  |> filter(fn: (r) => r["tipo_rilevazione"] == "Automatica" or r["tipo_rilevazione"] == "Manuale")
 *  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
 *  |> yield(name: "pivoted")
+* 
+* Sum:
+* from(bucket: "supsi")
+* |> range(start: -70y)
+* |> filter(fn: (r) => r["_measurement"] == "piscina")
+* |> filter(fn: (r) => r["_field"] == "percentuale_cloro")
+* |> yield(name: "sum")
+* 
+* Standard deviation:
+* from(bucket: "supsi")
+*  |> range(start: -7d)
+*  |> filter(fn: (r) => r["_measurement"] == "piscina")
+*  |> filter(fn: (r) => r["_field"] == "percentuale_cloro")
+*  |> filter(fn: (r) => r["tipo_rilevazione"] == "Automatica" or r["tipo_rilevazione"] == "Manuale")
+*  |> aggregateWindow(every: 5s, fn: stddev, createEmpty: false)
+*  |> yield(name: "stddev")
 * */
 
