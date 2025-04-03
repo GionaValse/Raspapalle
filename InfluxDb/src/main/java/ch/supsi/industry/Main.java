@@ -35,3 +35,24 @@ public class Main {
         }
     }
 }
+
+/*
+* Query mean:
+* from(bucket: "supsi")
+*  |> range(start: -7d)
+*  |> filter(fn: (r) => r["_measurement"] == "piscina")
+*  |> filter(fn: (r) => r["_field"] == "percentuale_cloro")
+*  |> filter(fn: (r) => r["tipo_rilevazione"] == "Automatica" or r["tipo_rilevazione"] == "Manuale")
+*  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+*  |> yield(name: "mean")
+*
+* Pivioted:
+* from(bucket: "supsi")
+*  |> range(start: -7d)
+*  |> filter(fn: (r) => r["_measurement"] == "piscina")
+*  |> filter(fn: (r) => r["_field"] == "percentuale_cloro")
+*  |> filter(fn: (r) => r["tipo_rilevazione"] == "Automatica" or r["tipo_rilevazione"] == "Manuale")
+*  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+*  |> yield(name: "pivoted")
+* */
+
